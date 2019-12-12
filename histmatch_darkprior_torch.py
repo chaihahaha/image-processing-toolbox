@@ -1,5 +1,6 @@
 import torch
 
+
 def torch_equalize(image):
     """Implements Equalize function from PIL using PyTorch ops based on:
     https://github.com/tensorflow/tpu/blob/master/models/official/efficientnet/autoaugment.py#L352"""
@@ -82,9 +83,13 @@ def hist_match_dark_prior(img):
     for i in range(3):
         result[:,:,i] = hist_match(result[:,:,i], dark_prior)
     return result
-a=torch.tensor([1,2,2,3,3,3,4,4,4,4,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8])
-a=a.reshape((3,4,3)).cuda()
-b=hist_match_dark_prior(a)
-print(a)
-print(b)
 
+if __name__=='__main__':
+    from PIL import Image
+    import numpy as np
+
+    im=Image.open("Night-schene-03.jpg")
+    img=torch.from_numpy(np.array(im))
+    img1=hist_match_dark_prior(img).numpy()
+    im1=Image.fromarray(img1)
+    im1.save('out.png')
