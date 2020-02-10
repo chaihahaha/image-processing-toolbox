@@ -63,8 +63,8 @@ def hist_match(source, template):
     t_values, t_counts = torch.unique(t, return_counts=True) 
     s_quantities = torch.cumsum(s_counts,0).type(torch.float)
     t_quantities = torch.cumsum(t_counts,0).type(torch.float)
-    s_quantities/=s_quantities[s_quantities.shape[0]-1]
-    t_quantities/=t_quantities[t_quantities.shape[0]-1]
+    s_quantities = s_quantities / s_quantities[s_quantities.shape[0]-1]
+    t_quantities = t_quantities / t_quantities[t_quantities.shape[0]-1]
     sour = (s_quantities * 255).type(torch.long) 
     temp = (t_quantities * 255).type(torch.long) 
     b = torch.zeros(sour.shape) 
