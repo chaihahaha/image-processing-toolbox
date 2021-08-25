@@ -59,11 +59,19 @@ def adjust_gamma(image, gamma=1.0):
     return cv2.LUT(image, table)
 def flood_fill(img, xsize, ysize, x_start, y_start, color, cond):
     # 满足cond条件时就一直用color洪水填充，起始位置(x_start, y_start)，输入img为形状为(xsize, ysize, 3)的numpy array
+
+    # 填充集s内的像素会被填充
     s = { (x_start, y_start) }
+    # 完成集filled内的像素不会再次填充
+    filled = set()
     while s:
         (x, y) = s.pop()
-        if cond(img[x,y]):
+        # 如果满足填充条件cond且未被填充过，则填充并将周围像素加入填充集s
+        if cond(img[x,y]) and (x, y) not in filled:
+            # 填充并加入完成集filled
             img[x,y] = color
+            filled.add((x, y))
+            # 将周围像素加入填充集s
             if x > 0:
                 s.add((x-1, y))
             if x < xsize - 1:
